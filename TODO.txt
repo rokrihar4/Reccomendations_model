@@ -1,0 +1,59 @@
+Metoda evaluate(self, test_data, n) (8)
+Napišite metodo razreda Recommender, ki sprejme testne podatke test_data in izračuna povprečne MAE, RMSE, priklic, natančnost, F1. Za priklic, natančnost in F1 boste morali za vsakega uporabnika izbrati nekaj priporočenih produktov. Jaz sem se odločil, da vzamem tiste, ki jih je uporabnik ocenil bolje od svojega povprečja. Pri tem upoštevajte, da ne priporočate že gledanih produktov in da parameter n označuje število priporočenih produktov.
+
+Katera od metod, ki ste jih že implementirali, deluje najbolje?
+
+Primer:
+
+md = MovieData('data/movies.dat')
+uim = UserItemData('data/user_ratedmovies.dat', min_ratings=1000, end_date='1.1.2008')
+rp = SlopeOnePredictor()
+rec = Recommender(rp)
+rec.fit(uim)
+
+uim_test = UserItemData('data/user_ratedmovies.dat', min_ratings=200, start_date='2.1.2008')
+mse, mae, precision, recall, f = rec.evaluate(uim_test, 20)
+print(mse, mae, precision, recall, f)
+ 
+Inkrementalno testiranje in prečno preverjanje (cross-validation)
+Namesto enkratnega testiranja je bolje, če razdelitev in ocenjevanje večkrat ponovimo. Pri prečnem preverjanju vse ocene razdelimo v nekaj delov (angl. fold). Npr. predpostavimo, da ocene razdelimo na deset delov. Potem desetkrat ponovimo učenje na devetih delih in testiranje na desetem (vsakič drugem). Končne vrednosti statistik so povprečne vrednosti čez posamezna testiranja.
+
+Inkrementalno testiranje je najboljši približek delovanja realnega sistema, kadar imamo na voljo datume dogodkov (npr. ocen). Najprej izberemo začetni datum in se učimo samo na ocenah do tega datuma. Ta sistem testiramo na nekem oknu, npr. ocenah, ki so bile oddane v naslednjem tednu. Potem vključimo te ocene v učno množico in testiramo na tednu, ki sledi. To ponavljamo, dokler ne zmanjka ocen. Na koncu rezultate povprečimo.
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Matrična faktorizacija (*)
+Napišite razred MatrixFactorizationPredictor, ki matriko ocen najprej faktorizira in jo potem uporabi za izračun ocen. Matrična faktorizacija je priljubljena metoda za priporočilne sisteme, saj običajno dosega boljše rezultate kot metoda najbljižjih sosedov; več o njej si lahko pogledate v (Y. Koren et al., Matrix factorization techniques for recommender systems ALI G. Takacs et al., Scalable Collaborative Filtering Approaches for Large Recommender Systems).
+
+------------------------------------------------------------------------------------------------------------------
+
+Matrična faktorizacija v nevronskih mrežah (*)
+Matrično faktorizacijo običajno implementiramo z direktno dekompozicijo matrike ocen. Obstaja alternativa z nevronskimi mrežami, s katerimi to lahko simuliramo. Poglejte si princip NCF (Neural Collaborative Filtering) in implementirajte enega od pristopov. 
+
+Primera:
+https://towardsdatascience.com/paper-review-neural-collaborative-filtering-explanation-implementation-ea3e031b7f96
+
+https://www.analyticsvidhya.com/blog/2021/05/movie-recommendations-using-keras-recommender-systems/
+
+------------------------------------------------------------------------------------------------------------------
+
+Priporočilni sistem s klasičnim strojnim učenjem (*)
+Že pred dolgo časa so na Kagglu objavili izziv, kjer je bila naloga napovedati artikle v naslednji kupčevi košarici. V tistem primeru se je izkazalo, da s pametnimi značilkami in osnovnimi metodami strojnega učenja dejansko dobimo najboljše rezultate. Napovedovanje naslednjih kupljenih artiklov pa je zelo podobno napovedovanju naslednjega filma. S strojnim učenjem razvijte model, s katerim lahko napovemo, kateri bo naslednji uporabnikov film.  Pri tem naj bo en primer v učni množici kombinacija filma in uporabnika, kjer je razred zadnji ogledani film, atributi pa se domislite sami.
+
+------------------------------------------------------------------------------------------------------------------
+
+Povezovalna pravila (*)
+Tokrat si poglejmo, kako bi iz podatkov o ocenah filmov zgradili množico zanimivih povezovalnih pravil. Iščemo pravila približno take oblike:
+
+ČE ti je všeč film X in če ti je všeč film Y, POTEM ti bo zelo verjetno všeč tudi film Z.
+
+Ker so povezovalna pravila namenjena podatkom z implicitnimi ocenami (dogodki), a pri filmih imamo eksplicitne vrednosti, moramo le-te najprej spremeniti v dogodke. Predlagam, da za dogodek označimo vse ocene višje od uporabnikovega povprečja.
+
+Napišite program za učenje povezovalnih pravil. Lahko poskusite sami implementirati APRIORI algoritem, lahko pa uporabite kakšno okolje, ki že ima povezovalna pravila, npr. Orange (glej tale blog: Association rules in Orange). Izpišite pravilo z največjo podporo, zaupanjem in dvigom.
+
+------------------------------------------------------------------------------------------------------------------
+
+Priporočilni sistemi, ki temeljijo na LLM (*)
+V zadnjem času se je pojavilo veliko idej za uporabo velikih jezikovnih modelov pri implementaciji priporočilnih sistemov. Poiščite kakšno od variant in jo implementirajte. Ni potrebno implementirati celotnega priporočilnega sistema, lahko tudi samo del, ki uporablja LLMje.
+
+En potencialen primer: https://medium.com/@bravekjh/building-a-smart-recommender-engine-with-llm-rag-in-python-47820204a796
