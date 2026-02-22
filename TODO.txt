@@ -33,5 +33,3 @@ Priporočilni sistemi, ki temeljijo na LLM (*)
 V zadnjem času se je pojavilo veliko idej za uporabo velikih jezikovnih modelov pri implementaciji priporočilnih sistemov. Poiščite kakšno od variant in jo implementirajte. Ni potrebno implementirati celotnega priporočilnega sistema, lahko tudi samo del, ki uporablja LLMje.
 
 En potencialen primer: https://medium.com/@bravekjh/building-a-smart-recommender-engine-with-llm-rag-in-python-47820204a796
-
-https://chatgpt.com/c/69553553-a5ac-832f-aafe-f71fff419b7b
